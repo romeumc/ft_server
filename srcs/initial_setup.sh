@@ -32,13 +32,9 @@ service php7.3-fpm status
 mv /tmp/nginx-conf /etc/nginx/sites-available/localhost
 ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled/localhost
 rm -rf /etc/nginx/sites-enabled/default
-# touch /var/www/index.php
-# echo "<?php
-# phpinfo();
-# ?>" > /var/www/index.php
 
-service nginx start
-service nginx status
+bash toggle_autoindex.sh $1
 
 echo $RESET
+echo $GREEN "Please open safari: http://localhost" $RESET
 bash

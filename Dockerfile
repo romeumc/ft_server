@@ -27,13 +27,14 @@ RUN openssl req -newkey rsa:2048 -x509 -sha256 -days 365 -nodes \
 	-keyout /etc/ssl/private/nginx-selfsigned.key \
 	-out /etc/ssl/certs/nginx-selfsigned.crt
 
-RUN chown -R www-data:www-data *
+RUN chown -R www-data:www-data /var/www/*
 RUN chmod -R 755 /var/www/*
-COPY /srcs/index.html /var/www/html
+COPY /srcs/index.nginx-debian.html /var/www/html
 
 
 WORKDIR /root
 EXPOSE 80 443
 COPY /srcs/toggle_autoindex.sh .
 COPY /srcs/initial_setup.sh .
-CMD bash initial_setup.sh
+ENTRYPOINT ["bash", "initial_setup.sh"]
+CMD ["off"]
