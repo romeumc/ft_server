@@ -14,11 +14,9 @@ BG_RED=$'\033[48;5;9m'"$WHITE$BOLD"
 CLEAR_LINE=$'\033[0K'
 
 
-# if [ ! -d /var/lib/mysql/mysql ]; then
-# 	echo $RESET$CYAN" Installing MYSQL for 1st time "$RESET$MUTED
- 	apt-get install -y mariadb-server 
-# 	echo $RESET
-# fi
+echo $RESET$CYAN" Installing MYSQL "$RESET$MUTED
+apt-get install -y mariadb-server
+echo $RESET
 
 if [ ! -d /var/www/html/phpmyadmin ]; then
 	echo $RESET$CYAN" Installing PHPMYADMIN for 1st time "$RESET$MUTED
@@ -31,7 +29,9 @@ if [ ! -d /var/www/html/phpmyadmin ]; then
 	echo $RESET
 fi
 
+WORDPRESS="false"
 if [ ! -d /var/www/html/wordpress ]; then
+	WORDPRESS="true"
 	echo $RESET$CYAN" Installing WORDPRESS for 1st time "$RESET$MUTED
 	cd /var/www/html
 	wget https://wordpress.org/latest.tar.gz
@@ -41,14 +41,6 @@ if [ ! -d /var/www/html/wordpress ]; then
 	mv /tmp/index.nginx-debian.html /var/www/html
 	chown -R www-data:www-data /var/www/*
 	chmod -R 755 /var/www/*
-
-	# Configure a wordpress database
-	service mysql start
-	echo "CREATE DATABASE wordpress;"| mysql -u root --skip-password
-	echo "GRANT ALL PRIVILEGES ON wordpress.* TO 'root'@'localhost' WITH GRANT OPTION;"| mysql -u root --skip-password
-	echo "UPDATE mysql.user SET plugin='' WHERE user='root';"| mysql -u root --skip-password
-	echo "FLUSH PRIVILEGES;"| mysql -u root --skip-password
-
 	echo $RESET
 fi
 
@@ -56,6 +48,13 @@ fi
 # Start MySQL
 echo $RESET$CYAN" Starting Services "$RESET$MUTED
 service mysql start
+if [[ $WORDPRESS == 'true' ]]; then
+	# Configure a wordpress database
+	echo "CREATE DATABASE wordpress;"| mysql -u root --skip-password
+	echo "GRANT ALL PRIVILEGES ON wordpress.* TO 'root'@'localhost' WITH GRANT OPTION;"| mysql -u root --skip-password
+	echo "UPDATE mysql.user SET plugin='' WHERE user='root';"| mysql -u root --skip-password
+	echo "FLUSH PRIVILEGES;"| mysql -u root --skip-password
+fi
 
 # Start PHP
 service php7.3-fpm start
