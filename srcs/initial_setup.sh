@@ -14,10 +14,6 @@ BG_RED=$'\033[48;5;9m'"$WHITE$BOLD"
 CLEAR_LINE=$'\033[0K'
 
 
-echo $RESET$CYAN" Installing MYSQL "$RESET$MUTED
-apt-get install -y mariadb-server
-echo $RESET
-
 if [ ! -d /var/www/html/phpmyadmin ]; then
 	echo $RESET$CYAN" Installing PHPMYADMIN for 1st time "$RESET$MUTED
 	cd /var/www/html

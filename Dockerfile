@@ -18,6 +18,8 @@ COPY /srcs/config.inc.php ./tmp
 COPY /srcs/wp-config.php ./tmp
 COPY /srcs/index.nginx-debian.html ./tmp
 
+RUN apt-get install -y mariadb-server
+
 WORKDIR /root
 EXPOSE 80 443
 COPY /srcs/toggle_autoindex.sh .

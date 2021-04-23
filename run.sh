@@ -4,8 +4,8 @@ docker run \
 	--name ft_server \
 	-it --rm \
 	-p 80:80 -p 443:443 \
-	-v $folder/data/html:/var/www/html \
-	-v $folder/data/mysql:/var/lib/mysql \
+	-v vol1:/var/www/html \
+	-v vol2:/var/lib/mysql \
 	ft_server:rmartins $1
 
 
